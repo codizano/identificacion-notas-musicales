@@ -187,6 +187,12 @@ body {
   color: #1e293b;
 }
 
+.clef-symbol {
+  font-family: "Noto Music", "Bravura", "Segoe UI Symbol", serif;
+  font-size: 2rem;
+  line-height: 1;
+}
+
 .score-row {
   text-align: center;
 }
@@ -202,7 +208,8 @@ body {
 }
 
 .next-row {
-  text-align: center;
+  display: flex;
+  justify-content: flex-end;
   margin-top: 0.5rem;
 }
 

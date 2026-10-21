@@ -17,14 +17,14 @@ export default function Staff({ trebleNote, bassNote }: StaffProps) {
 
     try {
       const renderer = new Renderer(containerRef.current, Renderer.Backends.SVG);
-      renderer.resize(320, 320);
+      renderer.resize(320, 272);
       const context = renderer.getContext();
 
       const topStave = new Stave(20, 20, 275);
       topStave.addClef("treble");
       topStave.setContext(context).draw();
 
-      const bottomStave = new Stave(20, 180, 275);
+      const bottomStave = new Stave(20, 132, 275);
       bottomStave.addClef("bass");
       bottomStave.setContext(context).draw();
 

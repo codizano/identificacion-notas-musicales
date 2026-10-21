@@ -120,11 +120,20 @@ export default function App() {
         <div className="card staff-card">
           <p className="instruction">Identifica las notas en ambos pentagramas</p>
           <Staff trebleNote={question.trebleNote} bassNote={question.bassNote} />
+          {bothAnswered && (
+            <div className="next-row">
+              <button className="btn-next" onClick={handleNext}>
+                {questionNum >= TOTAL_QUESTIONS ? "Ver resultado" : "Siguiente →"}
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="dual-grid">
           <div className="card option-section">
-            <h2 className="section-title">Clave de Sol</h2>
+            <h2 className="section-title" aria-label="Clave de sol">
+              <span className="clef-symbol" aria-hidden="true">𝄞</span>
+            </h2>
             <div className="options">
               {question.trebleOptions.map((opt) => {
                 let btnClass = "option-btn";
@@ -157,7 +166,9 @@ export default function App() {
           </div>
 
           <div className="card option-section">
-            <h2 className="section-title">Clave de Fa</h2>
+            <h2 className="section-title" aria-label="Clave de fa">
+              <span className="clef-symbol" aria-hidden="true">𝄢</span>
+            </h2>
             <div className="options">
               {question.bassOptions.map((opt) => {
                 let btnClass = "option-btn";
@@ -194,13 +205,6 @@ export default function App() {
           <span className="score-badge">✓ {score} correctas</span>
         </div>
 
-        {bothAnswered && (
-          <div className="next-row">
-            <button className="btn-next" onClick={handleNext}>
-              {questionNum >= TOTAL_QUESTIONS ? "Ver resultado" : "Siguiente →"}
-            </button>
-          </div>
-        )}
       </main>
     </div>
   );

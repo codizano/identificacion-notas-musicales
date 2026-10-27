@@ -1,12 +1,12 @@
 import type { NoteData } from "../types";
 
 export const NOTES: NoteData[] = [
-  { id: "c3", vexKey: "c/3", name: "Do (grave)", solfeo: "Do" },
-  { id: "d3", vexKey: "d/3", name: "Re (grave)", solfeo: "Re" },
-  { id: "e3", vexKey: "e/3", name: "Mi (grave)", solfeo: "Mi" },
-  { id: "f3", vexKey: "f/3", name: "Fa (grave)", solfeo: "Fa" },
-  { id: "g3", vexKey: "g/3", name: "Sol (grave)", solfeo: "Sol" },
-  { id: "a3", vexKey: "a/3", name: "La (grave)", solfeo: "La" },
+  { id: "c3", vexKey: "c/3", name: "Do", solfeo: "Do" },
+  { id: "d3", vexKey: "d/3", name: "Re", solfeo: "Re" },
+  { id: "e3", vexKey: "e/3", name: "Mi", solfeo: "Mi" },
+  { id: "f3", vexKey: "f/3", name: "Fa", solfeo: "Fa" },
+  { id: "g3", vexKey: "g/3", name: "Sol", solfeo: "Sol" },
+  { id: "a3", vexKey: "a/3", name: "La", solfeo: "La" },
   { id: "c4", vexKey: "c/4", name: "Do", solfeo: "Do" },
   { id: "d4", vexKey: "d/4", name: "Re", solfeo: "Re" },
   { id: "e4", vexKey: "e/4", name: "Mi", solfeo: "Mi" },
@@ -14,7 +14,7 @@ export const NOTES: NoteData[] = [
   { id: "g4", vexKey: "g/4", name: "Sol", solfeo: "Sol" },
   { id: "a4", vexKey: "a/4", name: "La", solfeo: "La" },
   { id: "b4", vexKey: "b/4", name: "Si", solfeo: "Si" },
-  { id: "c5", vexKey: "c/5", name: "Do (agudo)", solfeo: "Do" },
+  { id: "c5", vexKey: "c/5", name: "Do", solfeo: "Do" },
 ];
 
 const BASS_NOTE_KEYS = ["c/3", "d/3", "e/3", "f/3", "g/3", "a/3"];

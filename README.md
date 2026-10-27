@@ -6,6 +6,7 @@ Aplicación interactiva para identificar y aprender notas musicales en el pentag
 
 - Visualización interactiva del pentagrama
 - Identificación de notas musicales
+- Modos de intervalos en clave de sol y clave de fa para identificar dos notas y la distancia entre ellas
 - Interfaz intuitiva y responsiva
 
 ## Tecnologías

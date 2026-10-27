@@ -26,10 +26,48 @@ body {
   margin-bottom: 1rem;
 }
 
+.mode-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.mode-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.mode-switch {
+  padding: 0.45rem 0.7rem;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  border-radius: 8px;
+  color: #4338ca;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.mode-switch:hover {
+  background: #e0e7ff;
+}
+
+.result-mode-switch {
+  display: block;
+  margin: 0.75rem auto 0;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+}
+
 .title {
   font-size: 1.1rem;
   font-weight: 600;
   color: #1e293b;
+  margin: 0;
 }
 
 .question-counter {

@@ -1,6 +1,8 @@
 import { useState, useCallback } from "react";
 import Staff from "./components/Staff";
+import IntervalMode from "./components/IntervalMode";
 import { getRandomBassNote, getRandomTrebleNote, getOptions } from "./data/notes";
+import type { IntervalClef } from "./data/intervals";
 import type { NoteData, AnswerState } from "./types";
 import "./App.css";
 
@@ -16,6 +18,7 @@ function buildQuestion() {
 }
 
 export default function App() {
+  const [mode, setMode] = useState<"notes" | IntervalClef>("notes");
   const [question, setQuestion] = useState(buildQuestion);
   const [answerStateTreble, setAnswerStateTreble] = useState<AnswerState>("idle");
   const [answerStateBass, setAnswerStateBass] = useState<AnswerState>("idle");
@@ -73,6 +76,17 @@ export default function App() {
   const progressPercent = ((questionNum - 1) / TOTAL_QUESTIONS) * 100;
   const bothAnswered = answerStateTreble !== "idle" && answerStateBass !== "idle";
 
+  if (mode !== "notes") {
+    return (
+      <IntervalMode
+        key={mode}
+        clef={mode}
+        onBack={() => setMode("notes")}
+        onSwitchClef={() => setMode(mode === "treble" ? "bass" : "treble")}
+      />
+    );
+  }
+
   if (finished) {
     const pct = Math.round((score / TOTAL_ANSWERS) * 100);
     const emoji = pct >= 80 ? "🎉" : pct >= 50 ? "👍" : "💪";
@@ -94,6 +108,12 @@ export default function App() {
           <button className="btn-restart" onClick={handleRestart}>
             Volver a intentar
           </button>
+          <button className="mode-switch result-mode-switch" onClick={() => setMode("treble")}>
+            Intervalos · Clave de sol
+          </button>
+          <button className="mode-switch result-mode-switch" onClick={() => setMode("bass")}>
+            Intervalos · Clave de fa
+          </button>
         </div>
       </div>
     );
@@ -103,9 +123,17 @@ export default function App() {
     <div className="app">
       <header className="header">
         <h1 className="title">Notas en el pentagrama</h1>
-        <span className="question-counter">
-          {questionNum} / {TOTAL_QUESTIONS}
-        </span>
+        <div className="mode-header-actions">
+          <span className="question-counter">
+            {questionNum} / {TOTAL_QUESTIONS}
+          </span>
+          <button className="mode-switch" aria-label="Intervalos en clave de sol" onClick={() => setMode("treble")}>
+            Int. sol
+          </button>
+          <button className="mode-switch" aria-label="Intervalos en clave de fa" onClick={() => setMode("bass")}>
+            Int. fa
+          </button>
+        </div>
       </header>
 
       {/* Barra de progreso */}

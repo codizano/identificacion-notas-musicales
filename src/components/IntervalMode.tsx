@@ -177,39 +177,41 @@ export default function IntervalMode({ clef, onBack, onSwitchClef }: IntervalMod
           ))}
         </div>
 
-        <div className="card option-section">
-          <h2 className="section-title">Distancia del intervalo</h2>
-          <div className="options">
-            {question.options.map((option) => {
-              let buttonClass = "option-btn";
-              if (selectedAnswers.interval === option) {
-                buttonClass += answerStates.interval === "correct" ? " correct" : " wrong";
-              } else if (answerStates.interval !== "idle" && option === question.answer) {
-                buttonClass += " reveal";
-              }
+        {answerStates.lower !== "idle" && answerStates.upper !== "idle" && (
+          <div className="card option-section">
+            <h2 className="section-title">Distancia del intervalo</h2>
+            <div className="options">
+              {question.options.map((option) => {
+                let buttonClass = "option-btn";
+                if (selectedAnswers.interval === option) {
+                  buttonClass += answerStates.interval === "correct" ? " correct" : " wrong";
+                } else if (answerStates.interval !== "idle" && option === question.answer) {
+                  buttonClass += " reveal";
+                }
 
-              return (
-                <button
-                  key={option}
-                  className={buttonClass}
-                  onClick={() => handleAnswer("interval", option, question.answer)}
-                  disabled={answerStates.interval !== "idle"}
-                >
-                  {option}
-                </button>
-              );
-            })}
-          </div>
-          {answerStates.interval !== "idle" && (
-            <div className="feedback-row">
-              <span className={`feedback-text ${answerStates.interval === "correct" ? "feedback-correct" : "feedback-wrong"}`}>
-                {answerStates.interval === "correct"
-                  ? `✓ ${question.lowerNote.name}–${question.upperNote.name}: ${question.answer}`
-                  : `✗ Era ${question.lowerNote.name}–${question.upperNote.name}: ${question.answer}`}
-              </span>
+                return (
+                  <button
+                    key={option}
+                    className={buttonClass}
+                    onClick={() => handleAnswer("interval", option, question.answer)}
+                    disabled={answerStates.interval !== "idle"}
+                  >
+                    {option}
+                  </button>
+                );
+              })}
             </div>
-          )}
-        </div>
+            {answerStates.interval !== "idle" && (
+              <div className="feedback-row">
+                <span className={`feedback-text ${answerStates.interval === "correct" ? "feedback-correct" : "feedback-wrong"}`}>
+                  {answerStates.interval === "correct"
+                    ? `✓ ${question.lowerNote.name}–${question.upperNote.name}: ${question.answer}`
+                    : `✗ Era ${question.lowerNote.name}–${question.upperNote.name}: ${question.answer}`}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="score-row">
           <span className="score-badge">✓ {score} / {TOTAL_ANSWERS} correctas</span>

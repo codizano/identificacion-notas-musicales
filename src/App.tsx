@@ -159,41 +159,6 @@ export default function App() {
 
         <div className="dual-grid">
           <div className="card option-section">
-            <h2 className="section-title" aria-label="Clave de sol">
-              <span className="clef-symbol" aria-hidden="true">𝄞</span>
-            </h2>
-            <div className="options">
-              {question.trebleOptions.map((opt) => {
-                let btnClass = "option-btn";
-                if (selectedTrebleId === opt.id) {
-                  btnClass += answerStateTreble === "correct" ? " correct" : " wrong";
-                } else if (answerStateTreble !== "idle" && opt.id === question.trebleNote.id) {
-                  btnClass += " reveal";
-                }
-                return (
-                  <button
-                    key={opt.id}
-                    className={btnClass}
-                    onClick={() => handleAnswer("treble", opt)}
-                    disabled={answerStateTreble !== "idle"}
-                  >
-                    {opt.solfeo}
-                  </button>
-                );
-              })}
-            </div>
-            {answerStateTreble !== "idle" && (
-              <div className="feedback-row">
-                <span className={`feedback-text ${answerStateTreble === "correct" ? "feedback-correct" : "feedback-wrong"}`}>
-                  {answerStateTreble === "correct"
-                    ? `✓ ¡Correcto! Es ${question.trebleNote.name}`
-                    : `✗ Era ${question.trebleNote.name}`}
-                </span>
-              </div>
-            )}
-          </div>
-
-          <div className="card option-section">
             <h2 className="section-title" aria-label="Clave de fa">
               <span className="clef-symbol" aria-hidden="true">𝄢</span>
             </h2>
@@ -223,6 +188,41 @@ export default function App() {
                   {answerStateBass === "correct"
                     ? `✓ ¡Correcto! Es ${question.bassNote.name}`
                     : `✗ Era ${question.bassNote.name}`}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="card option-section">
+            <h2 className="section-title" aria-label="Clave de sol">
+              <span className="clef-symbol" aria-hidden="true">𝄞</span>
+            </h2>
+            <div className="options">
+              {question.trebleOptions.map((opt) => {
+                let btnClass = "option-btn";
+                if (selectedTrebleId === opt.id) {
+                  btnClass += answerStateTreble === "correct" ? " correct" : " wrong";
+                } else if (answerStateTreble !== "idle" && opt.id === question.trebleNote.id) {
+                  btnClass += " reveal";
+                }
+                return (
+                  <button
+                    key={opt.id}
+                    className={btnClass}
+                    onClick={() => handleAnswer("treble", opt)}
+                    disabled={answerStateTreble !== "idle"}
+                  >
+                    {opt.solfeo}
+                  </button>
+                );
+              })}
+            </div>
+            {answerStateTreble !== "idle" && (
+              <div className="feedback-row">
+                <span className={`feedback-text ${answerStateTreble === "correct" ? "feedback-correct" : "feedback-wrong"}`}>
+                  {answerStateTreble === "correct"
+                    ? `✓ ¡Correcto! Es ${question.trebleNote.name}`
+                    : `✗ Era ${question.trebleNote.name}`}
                 </span>
               </div>
             )}

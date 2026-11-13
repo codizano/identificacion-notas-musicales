@@ -6,6 +6,7 @@ import type { AnswerState } from "../types";
 const TOTAL_QUESTIONS = 10;
 const ANSWERS_PER_QUESTION = 3;
 const TOTAL_ANSWERS = TOTAL_QUESTIONS * ANSWERS_PER_QUESTION;
+const getUnisonQuestionNum = () => Math.floor(Math.random() * TOTAL_QUESTIONS) + 1;
 type AnswerKey = "lower" | "upper" | "interval";
 type AnswerStates = Record<AnswerKey, AnswerState>;
 type SelectedAnswers = Record<AnswerKey, string | null>;
@@ -23,7 +24,10 @@ interface IntervalModeProps {
 }
 
 export default function IntervalMode({ clef, onBack, onSwitchClef }: IntervalModeProps) {
-  const [question, setQuestion] = useState<IntervalQuestion>(() => getRandomIntervalQuestion(clef));
+  const [unisonQuestionNum, setUnisonQuestionNum] = useState(getUnisonQuestionNum);
+  const [question, setQuestion] = useState<IntervalQuestion>(() =>
+    getRandomIntervalQuestion(clef, unisonQuestionNum === 1)
+  );
   const [answerStates, setAnswerStates] = useState<AnswerStates>(INITIAL_ANSWER_STATES);
   const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers>({
     lower: null,
@@ -49,14 +53,16 @@ export default function IntervalMode({ clef, onBack, onSwitchClef }: IntervalMod
       setFinished(true);
       return;
     }
-    setQuestion(getRandomIntervalQuestion(clef));
+    setQuestion(getRandomIntervalQuestion(clef, questionNum + 1 === unisonQuestionNum));
     setAnswerStates(INITIAL_ANSWER_STATES);
     setSelectedAnswers({ lower: null, upper: null, interval: null });
     setQuestionNum((currentQuestion) => currentQuestion + 1);
   };
 
   const handleRestart = () => {
-    setQuestion(getRandomIntervalQuestion(clef));
+    const nextUnisonQuestionNum = getUnisonQuestionNum();
+    setUnisonQuestionNum(nextUnisonQuestionNum);
+    setQuestion(getRandomIntervalQuestion(clef, nextUnisonQuestionNum === 1));
     setAnswerStates(INITIAL_ANSWER_STATES);
     setSelectedAnswers({ lower: null, upper: null, interval: null });
     setScore(0);

@@ -1,5 +1,5 @@
 import type { NoteData } from "../types";
-import { getOptions, getRandomBassNote, getRandomTrebleNote, NOTES } from "./notes";
+import { getOptions, NOTES } from "./notes";
 
 export type IntervalClef = "treble" | "bass";
 
@@ -24,6 +24,7 @@ const INTERVAL_NAMES: Record<number, string> = {
 };
 
 const AVAILABLE_INTERVALS = Object.values(INTERVAL_NAMES);
+const UNISON_INTERVAL = INTERVAL_NAMES[1];
 
 function getIntervalName(
   lowerNote: NoteData,
@@ -41,17 +42,20 @@ function shuffle<T>(values: T[]): T[] {
   return [...values].sort(() => Math.random() - 0.5);
 }
 
-export function getRandomIntervalQuestion(clef: IntervalClef): IntervalQuestion {
+export function getRandomIntervalQuestion(clef: IntervalClef, isUnison: boolean): IntervalQuestion {
   const clefNotes = clef === "treble"
     ? NOTES.filter((note) => note.vexKey.endsWith("/4") || note.vexKey === "c/5")
     : NOTES.filter((note) => note.vexKey.endsWith("/3"));
-  const firstNote = clef === "treble" ? getRandomTrebleNote() : getRandomBassNote();
+  const possibleFirstNotes = isUnison ? clefNotes : clefNotes.slice(0, -1);
+  const firstNote = possibleFirstNotes[Math.floor(Math.random() * possibleFirstNotes.length)];
   const firstIndex = clefNotes.findIndex((note) => note.id === firstNote.id);
-  const secondNote = clefNotes[
-    firstIndex + Math.floor(Math.random() * (clefNotes.length - firstIndex))
-  ];
+  const secondNote = isUnison
+    ? firstNote
+    : clefNotes[firstIndex + 1 + Math.floor(Math.random() * (clefNotes.length - firstIndex - 1))];
   const answer = getIntervalName(firstNote, secondNote, clefNotes);
-  const distractors = shuffle(AVAILABLE_INTERVALS.filter((name) => name !== answer)).slice(0, 2);
+  const distractors = shuffle(
+    AVAILABLE_INTERVALS.filter((name) => name !== answer && (isUnison || name !== UNISON_INTERVAL))
+  ).slice(0, 2);
 
   return {
     lowerNote: firstNote,

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { FormEvent } from "react";
 import IntervalStaff from "./IntervalStaff";
 import { getRandomIntervalQuestion, type IntervalClef, type IntervalQuestion } from "../data/intervals";
 import type { AnswerState } from "../types";
@@ -36,7 +37,10 @@ export default function IntervalMode({ clef, onBack, onSwitchClef }: IntervalMod
   });
   const [score, setScore] = useState(0);
   const [questionNum, setQuestionNum] = useState(1);
-  const [finished, setFinished] = useState(false);
+  const [screen, setScreen] = useState<"quiz" | "name" | "result">("quiz");
+  const [studentName, setStudentName] = useState("");
+  const [confirmedName, setConfirmedName] = useState("");
+  const [attemptDate, setAttemptDate] = useState<Date | null>(null);
 
   const handleAnswer = (key: AnswerKey, selected: string, correctAnswer: string) => {
     if (answerStates[key] !== "idle") return;
@@ -50,7 +54,8 @@ export default function IntervalMode({ clef, onBack, onSwitchClef }: IntervalMod
 
   const handleNext = () => {
     if (questionNum >= TOTAL_QUESTIONS) {
-      setFinished(true);
+      setAttemptDate(new Date());
+      setScreen("name");
       return;
     }
     setQuestion(getRandomIntervalQuestion(clef, questionNum + 1 === unisonQuestionNum));
@@ -67,10 +72,54 @@ export default function IntervalMode({ clef, onBack, onSwitchClef }: IntervalMod
     setSelectedAnswers({ lower: null, upper: null, interval: null });
     setScore(0);
     setQuestionNum(1);
-    setFinished(false);
+    setStudentName("");
+    setConfirmedName("");
+    setAttemptDate(null);
+    setScreen("quiz");
   };
 
-  if (finished) {
+  const trimmedStudentName = studentName.trim();
+  const handleShowResult = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!trimmedStudentName || !attemptDate) return;
+    setConfirmedName(trimmedStudentName);
+    setScreen("result");
+  };
+
+  if (screen === "name") {
+    return (
+      <div className="app">
+        <div className="mode-header">
+          <h1 className="title">Intervalos · Clave de {clef === "treble" ? "sol" : "fa"}</h1>
+          <div className="mode-header-actions">
+            <button className="mode-switch" onClick={onSwitchClef}>
+              Clave de {clef === "treble" ? "fa" : "sol"}
+            </button>
+            <button className="mode-switch" onClick={onBack}>Notas</button>
+          </div>
+        </div>
+        <form className="card name-card" onSubmit={handleShowResult}>
+          <h2 className="result-title">Antes de ver tu resultado</h2>
+          <label className="name-label" htmlFor="student-name">
+            Escribe tu nombre
+          </label>
+          <input
+            id="student-name"
+            className="name-input"
+            type="text"
+            autoComplete="name"
+            value={studentName}
+            onChange={(event) => setStudentName(event.target.value)}
+          />
+          <button className="btn-restart" type="submit" disabled={!trimmedStudentName}>
+            Ver mi resultado
+          </button>
+        </form>
+      </div>
+    );
+  }
+
+  if (screen === "result") {
     const percentage = Math.round((score / TOTAL_ANSWERS) * 100);
     const emoji = percentage >= 80 ? "🎉" : percentage >= 50 ? "👍" : "💪";
 
@@ -87,8 +136,18 @@ export default function IntervalMode({ clef, onBack, onSwitchClef }: IntervalMod
         </div>
         <div className="card result-card">
           <div className="result-emoji">{emoji}</div>
-          <h2 className="result-title">¡Terminaste!</h2>
-          <div className="result-score">{score} / {TOTAL_ANSWERS}</div>
+          <h2 className="result-title">{confirmedName}</h2>
+          <p className="result-date">
+            Fecha y hora local: {attemptDate?.toLocaleString("es")}
+          </p>
+          <div className="result-score">
+            <span className="result-score-label">Puntaje</span>
+            {score} / {TOTAL_ANSWERS}
+          </div>
+          <div className="result-details">
+            <p>Aciertos: {score}</p>
+            <p>Fallos: {TOTAL_ANSWERS - score}</p>
+          </div>
           <p className="result-sub">
             {percentage >= 80
               ? "¡Excelente trabajo!"
@@ -96,7 +155,10 @@ export default function IntervalMode({ clef, onBack, onSwitchClef }: IntervalMod
                 ? "¡Buen intento, sigue practicando!"
                 : "¡Practica más, tú puedes!"}
           </p>
-          <button className="btn-restart" onClick={handleRestart}>Volver a intentar</button>
+          <p className="result-instruction">
+            Tómale una foto a esta pantalla y envíala a tu profesor para registrar tu nota.
+          </p>
+          <button className="btn-restart" onClick={handleRestart}>Volver al inicio</button>
         </div>
       </div>
     );
